@@ -25,4 +25,19 @@ class Shop
       else
         cb null, body, headers
 
+  # Retrieves all transactions associated with a Shop
+  # '/shops/:shop_id/transactions' GET
+    findAllShopTransactions: ({token, secret, limit, offset, page}, cb) ->
+      params = {}
+      params.limit = limit if limit?
+      params.offset = offset if offset?
+      params.page = page if page?
+      @client.get "/shops/#{@shopId}/transactions", token, secret, params..., (err, status, body, headers) ->
+        return cb(err) if err
+        if status isnt 200
+          cb(new Error('Get all transactions error'))
+        else
+          cb null, body, headers
+
+
 module.exports = Shop
